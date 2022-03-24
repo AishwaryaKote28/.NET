@@ -1,7 +1,11 @@
+using LinqQueries.Data;
+using LinqQueries.Model;
+using LinqQueries.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +32,9 @@ namespace LinqQueries
         {
 
             services.AddControllers();
+            services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
+            services.AddTransient<IProducts, ProductsRepo>();
+            services.AddTransient<ProductsService, ProductsService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LinqQueries", Version = "v1" });
